@@ -6906,6 +6906,7 @@ function renderSettings(){ setTimeout(refreshShareStat,120); setTimeout(()=>{ if
               <option value="<STX>" ${b0?.pollCmd==='<STX>'?'selected':''}>STX (0x02)</option>
               <option value="RM<CR><LF>" ${b0?.pollCmd==='RM<CR><LF>'?'selected':''}>RM + CR LF</option>
               <option value="SI<CR><LF>" ${b0?.pollCmd==='SI<CR><LF>'?'selected':''}>SI + CR LF (Toledo)</option>
+              <option value="KPRINT<CR><LF>" ${b0?.pollCmd==='KPRINT<CR><LF>'?'selected':''}>KPRINT + CR LF (Rice Lake 920i)</option>
             </select>
           </div>
           <div class="field"><label>Ask every (ms)</label>
@@ -6958,6 +6959,7 @@ function renderSettings(){ setTimeout(refreshShareStat,120); setTimeout(()=>{ if
               <option value="W<CR><LF>" ${b1?.pollCmd==='W<CR><LF>'?'selected':''}>W + CR LF</option>
               <option value="<ENQ>" ${b1?.pollCmd==='<ENQ>'?'selected':''}>ENQ (0x05)</option>
               <option value="SI<CR><LF>" ${b1?.pollCmd==='SI<CR><LF>'?'selected':''}>SI + CR LF (Toledo)</option>
+              <option value="KPRINT<CR><LF>" ${b1?.pollCmd==='KPRINT<CR><LF>'?'selected':''}>KPRINT + CR LF (Rice Lake 920i)</option>
             </select>
           </div>
           <div class="field"><label>Ask every (ms)</label>
