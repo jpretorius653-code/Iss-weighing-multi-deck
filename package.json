@@ -1,0 +1,66 @@
+{
+  "name": "iss-weighbridge",
+  "productName": "ISS Weighbridge",
+  "version": "9.3.1",
+  "description": "ISS Weighbridge — weighbridge control, ticketing and reporting. Industrial Scale Solutions.",
+  "author": {
+    "name": "Industrial Scale Solutions",
+    "email": "info@industrialscalesolutions.co.za"
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win --x64 --publish never",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "dependencies": {
+    "serialport": "^13.0.0"
+  },
+  "devDependencies": {
+    "electron": "^41.10.4",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "za.co.iss.weighbridge",
+    "productName": "ISS Weighbridge",
+    "copyright": "© 2026 Industrial Scale Solutions (Reg. 2025/316125/07)",
+    "npmRebuild": true,
+    "asarUnpack": [
+      "**/node_modules/serialport/**",
+      "**/node_modules/@serialport/**"
+    ],
+    "files": [
+      "electron/**/*",
+      "renderer/**/*",
+      "build/icon.png"
+    ],
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "allowElevation": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "ISS Weighbridge",
+      "artifactName": "ISS-Weighbridge-Setup-${version}.exe",
+      "uninstallDisplayName": "ISS Weighbridge ${version}"
+    }
+  }
+}

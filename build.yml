@@ -1,0 +1,52 @@
+name: Build Windows EXE
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # NOTE: no `cache: npm` here on purpose. setup-node's npm cache requires a
+      # committed package-lock.json and fails the job outright without one
+      # ("Dependencies lock file is not found"). This repo intentionally ships
+      # no lockfile — see BUILD-NOTES.md if you want to add one and turn the
+      # cache back on.
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check version stamps match
+        id: pkg
+        shell: bash
+        run: |
+          PKG=$(node -p "require('./package.json').version")
+          REN=$(node -p "(require('fs').readFileSync('renderer/index.html','utf8').match(/RENDERER_BUILD\s*=\s*'([^']+)'/)||[,'MISSING'])[1]")
+          echo "package.json = $PKG / renderer = $REN"
+          if [ "$PKG" != "$REN" ]; then
+            echo "::error::Version mismatch - package.json is $PKG but RENDERER_BUILD is $REN. Bump RENDERER_BUILD in renderer/index.html."
+            exit 1
+          fi
+          echo "version=$PKG" >> "$GITHUB_OUTPUT"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build installer (no publish)
+        run: npm run dist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # provided automatically; silences the token warning
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: ISS-Weighbridge-Setup-${{ steps.pkg.outputs.version }}
+          path: dist/*.exe
+          if-no-files-found: error
+          retention-days: 90
